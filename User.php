@@ -1,4 +1,5 @@
 <?php
+include_once 'Database.php';
 
 class User {
 	private $id;
@@ -7,32 +8,30 @@ class User {
 	private $birthdate;
 	private $sex;
 	private $nativeCity;
-	private $connection;
 
 	public function __construct() {
-		$this->connection = new mysqli('localhost', 'root', 'asdfasdf', 'stlmax');
-
 		$args_count = func_num_args();
 		$args = func_get_args();
 
 		if ($args_count === 1) {
 			$this->id = $args[0];
-			$query = "SELECT name, surname, birthdate, sex, native_city FROM users WHERE id={$this->id};";
+			$sql = "SELECT name, surname, birthdate, sex, native_city FROM users WHERE id={$this->id};";
 			// TODO Проверять, доступен ли указанный id
-			$set = $this->connection->query($query);
+			$set = Database::query($sql);
 			$row = $set->fetch_assoc();
 			$this->name       = $row['name'];
 			$this->surname    = $row['surname'];
 			$this->birthdate  = $row['birthdate'];
 			$this->sex        = $row['sex'];
 			$this->nativeCity = $row['native_city'];
-			
 		} elseif ($args_count === 5) {
 			$this->name       = $args[0];
 			$this->surname    = $args[1];
 			$this->birthdate  = $args[2];
 			$this->sex        = $args[3];
 			$this->nativeCity = $args[4];
+		} else {
+			throw new Exception("Error! Wrong amount of parameters in __construct()\n", 1);
 		}
 
 		$this->save();
@@ -47,14 +46,9 @@ class User {
 		}
 	}
 
-	public function setName(string $name) : void
-	{
-		$this->name = $name;
-	}
-
 	private function edit()
 	{
-		$query = "UPDATE users SET "
+		$sql = "UPDATE users SET "
 			. "name='{$this->name}', "
 			. "surname='{$this->surname}', "
 			. "birthdate='{$this->birthdate}', "
@@ -62,22 +56,22 @@ class User {
 			. "native_city='{$this->nativeCity}' "
 			. "WHERE id={$this->id};";
 
-		$this->connection->query($query);
+		Database::query($sql);
 	}
 
 	private function create()
 	{
-		$query = "INSERT INTO users "
+		$sql = "INSERT INTO users "
 			. "(name, surname, birthdate, sex, native_city) "
 			. "VALUES ('{$this->name}', '{$this->surname}', "
 			. "'{$this->birthdate}', {$this->sex}, '{$this->nativeCity}');";
-		$this->connection->query($query);
+		Database::query($sql);
 	}
 
-	public function remove(int $id) : void
+	public static function remove(int $id) : void
 	{
-		$query = "DELETE FROM users WHERE id={$id};";
-		$this->connection->query($query);
+		$sql = "DELETE FROM users WHERE id={$id}";
+		Database::query($sql);
 	}
 
 	public static function getAge() : int
@@ -88,6 +82,14 @@ class User {
 	public static function getSex($sex) : string
 	{
 		return $sex ? 'муж' : 'жен';
+	}
+
+	public function show() : string
+	{
+		return "{id:$this->id; "
+			. "name:$this->name; "
+			. "nativeCity:$this->nativeCity"
+			. "}\n";
 	}
 
 	public function format() : stdClass

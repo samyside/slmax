@@ -21,7 +21,7 @@ class Database {
 
 	public static function getInstance()
 	{
-		if (isset(self::$instance)) {
+		if (self::$instance === null) {
 			self::$instance = new self;
 		}
 		return self::$instance;
@@ -29,7 +29,8 @@ class Database {
 
 	public static function query(string $sql)
 	{
-		$resultSet = $this->connection->query($sql);
+		$db = self::getInstance();
+		return $db->connection->query($sql);
 	}
 
 	public function __clone() {}

@@ -10,14 +10,15 @@
 Утилита для работы с базой данных "mysql" (консольная утилита GNU/Linux)
 */
 
-include 'user.php';
-include 'entities.php';
+include 'UserArray.php';
 
-$newUser = new User('Steve', 'Howking', 2000, 1, 'Brest');
-echo User::getSex($newUser) . PHP_EOL;
-$newUser->remove(3);
-$newUser->save();
+$user1 = new User('Steve', 'Howking', 2000, 1, 'Brest');
+echo $user1->show();
+$user2 = new User(1);
 
-$existUser = new User(69);
-$existUser->setName('Robert');
-$existUser->save();
+$array_users = new UserArray([1,2,3,4, 10]);
+
+foreach ($array_users->getUsers() as $user) {
+	echo $user->show();
+}
+$array_users->removeUsers();
