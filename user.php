@@ -12,53 +12,66 @@ class User {
 	public function __construct() {
 		$this->connection = new mysqli('localhost', 'root', 'asdfasdf', 'stlmax');
 
-		$arg_count = func_num_args();
+		$args_count = func_num_args();
 		$args = func_get_args();
 
-		if ($arg_count == 1) {
+		if ($args_count === 1) {
 			$this->id = $args[0];
-			$query = "SELECT name, surname, birthdate, sex, native_city FROM users WHERE id={$id};";
+			$query = "SELECT name, surname, birthdate, sex, native_city FROM users WHERE id={$this->id};";
+			// TODO Проверять, доступен ли указанный id
 			$set = $this->connection->query($query);
 			$row = $set->fetch_assoc();
-			$this->name = $row['name'];
-			$this->surname = $row['surname'];
-			$this->birthdate = $row['birthdate'];
-			$this->sex = $row['sex'];
+			$this->name       = $row['name'];
+			$this->surname    = $row['surname'];
+			$this->birthdate  = $row['birthdate'];
+			$this->sex        = $row['sex'];
 			$this->nativeCity = $row['native_city'];
 			
-		} elseif ($arg_count == 5) {
+		} elseif ($args_count === 5) {
 			$this->name       = $args[0];
 			$this->surname    = $args[1];
 			$this->birthdate  = $args[2];
 			$this->sex        = $args[3];
 			$this->nativeCity = $args[4];
 		}
+
+		$this->save();
 	}
 
-	public function save()
+	private function save()
 	{
-		if ($this->connection == false) {
-			// return 'Database: connection error!';
+		if (isset($this->id)) {
+			$this->edit($this->id);
 		} else {
-			// return 'Database: success.';
+			$this->create($this);
 		}
-		echo "id = {$this->id}";
+	}
 
-		$query = "update users set "
-			. "name='{$this->name}' "
-			. "surname='{$this->surname}' "
-			. "where id={$this->id};";
-		$resultSet;
-		if (!$resultSet = mysqli_query($this->connection, $query)) {
-			echo 'Database: error! ' . mysqli_error($this->connection);
-		}
+	public function setName(string $name) : void
+	{
+		$this->name = $name;
+	}
 
-		if ($this->connection->query($query) === true) {
-			echo 'surname is changed.';
-		} else {
-			echo 'Error! Query was failed';
-		}
+	private function edit()
+	{
+		$query = "UPDATE users SET "
+			. "name='{$this->name}', "
+			. "surname='{$this->surname}', "
+			. "birthdate='{$this->birthdate}', "
+			. "sex='{$this->sex}', "
+			. "native_city='{$this->nativeCity}' "
+			. "WHERE id={$this->id};";
 
+		$this->connection->query($query);
+	}
+
+	private function create()
+	{
+		$query = "INSERT INTO users "
+			. "(name, surname, birthdate, sex, native_city) "
+			. "VALUES ('{$this->name}', '{$this->surname}', "
+			. "'{$this->birthdate}', {$this->sex}, '{$this->nativeCity}');";
+		$this->connection->query($query);
 	}
 
 	public function remove(int $id) : void
@@ -69,7 +82,7 @@ class User {
 
 	public static function getAge() : int
 	{
-
+		return date_diff(date_create($this->birthdate, date_create('now')))->y;
 	}
 
 	public static function getSex($sex) : string
@@ -77,13 +90,12 @@ class User {
 		return $sex ? 'муж' : 'жен';
 	}
 
-	public function format()
+	public function format() : stdClass
 	{
-
+		$obj = (object) get_object_vars($this);
+		$obj->age = self::getAge();
+		$obj->sex = self::getSex();
+		return $obj;
 	}
 }
 
-$newUser = new User('Steve', 'Howking', 2000, 1, 'brest');
-echo User::getSex($newUser) . PHP_EOL;
-// $newUser->save();
-$newUser->remove(3);
