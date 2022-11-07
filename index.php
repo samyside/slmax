@@ -14,7 +14,7 @@ include 'UserArray.php';
 
 try {
 	echo "\n---> Создание пользователя только по полям\n";
-	$userByFields = new User('Steve', 'Howking', '2000-01-02', 1, 'Brest');
+	$userByFields = new User('Stephen', 'Hawking', '1942-01-08', 1, 'Oxford');
 	var_dump($userByFields);
 
 	echo "\n---> Получение пользователя из базы данных по id\n";
@@ -28,7 +28,6 @@ try {
 }
 
 echo "\n---> Удаление пользователя по id\n";
-// User::remove(4);
 $userByFields->remove();
 
 echo "\n---> Преобразование даты рождения в возраст\n";
