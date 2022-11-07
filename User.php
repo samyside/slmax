@@ -13,7 +13,9 @@ include_once 'Database.php';
 
 /*
 Класс User создает сущность с полями: id, имя, фамилия, дата рождения, пол, город рождения.
-Принимает в конструкторе либо одно поле с id, либо с полями: имя, фамилия, дата рождения, пол, город рождения. В случае передачи id, читает запись из БД с указанным id. В случае передачи полей, создает новую запись в БД с указанными полями.
+Принимает в конструкторе либо одно поле с id, либо с полями: имя, фамилия, дата рождения,
+пол, город рождения. В случае передачи id, читает запись из БД с указанным id. В случае
+передачи полей, создает новую запись в БД с указанными полями.
 Методы класса:
 remove(int) - удаляет запись из БД по id
 convertDateToAge(string). Получает возраст исходя из даты рождения
@@ -30,7 +32,8 @@ class User {
 	private string $nativeCity;
 
 	/*
-	Конструктор может принимать id или все поля (string name, string, surname, string birthdate, int sex, string nativeCity) кроме id, в этом случае создается новая запись в БД.
+	Конструктор может принимать id или все поля (string name, string, surname, string birthdate,
+	int sex, string nativeCity) кроме id, в этом случае создается новая запись в БД.
 	*/
 	public function __construct() {
 		$args_count = func_num_args();
@@ -61,7 +64,7 @@ class User {
 		}
 	}
 
-	private function save()
+	private function save() : void
 	{
 		$sql = "INSERT INTO users "
 			. "(name, surname, birthdate, sex, native_city) "
@@ -69,7 +72,7 @@ class User {
 			. "'{$this->birthdate}', {$this->sex}, '{$this->nativeCity}')";
 		Database::query($sql);
 
-		$sql = "select id from users order by id desc limit 1";
+		$sql = "SELECT id FROM users ORDER by id desc limit 1";
 		$set = Database::query($sql);
 		$row = $set->fetch_row();
 		$this->id = $row[0];
@@ -77,7 +80,7 @@ class User {
 
 	private function isExists(int $id)
 	{
-		$sql = "SELECT id FROM users WHERE id=$id";
+		$sql = "SELECT id FROM users WHERE id=$id LIMIT 1";
 		return Database::query($sql)->num_rows > 0;
 	}
 
@@ -87,12 +90,12 @@ class User {
 		Database::query($sql);
 	}
 
-	private function getBirthdate()
+	private function getBirthdate() : string
 	{
 		return $this->birthdate;
 	}
 
-	private function getSex()
+	private function getSex() : bool
 	{
 		return $this->sex;
 	}
