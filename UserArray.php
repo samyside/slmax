@@ -17,6 +17,11 @@ removeUsers() - удаляет записи User из базы данных
 */
 include 'User.php';
 
+if (!class_exists('User')) {
+	echo (new Exception("Error! Class \"User\" not found\n"))->getMessage();
+	die();
+}
+
 class UserArray
 {
 	private $users;

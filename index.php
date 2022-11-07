@@ -12,32 +12,17 @@
 
 include 'UserArray.php';
 
-$user1 = new User('Steve', 'Howking', '2000-01-02', 1, 'Brest');
-echo $user1->show();
-$user2 = new User(2);
+// Создание пользователя только по полям
+$userById = new User('Steve', 'Howking', '2000-01-02', 1, 'Brest');
+$userById->remove(3);
+echo $userById->show();
 
-$array_users = new UserArray(array(1, 2, 3, 4, 7));
+// Получение пользователя по id
+// $userByFields = new User(2);
 
-foreach ($array_users->getUsers() as $user) {
-	echo $user->show();
-}
-// $array_users->removeUsers();
+// Создание списка людей по массиву id
+// $arrayUsers = new UserArray(array(1, 2, 3, 4, 7));
 
-$user3 = new User(3);
-var_dump($user3);
-$user3 = $user3->format();
-echo User::convertDateToAge($user2->getBirthdate());
-var_dump($user3);
-// var_dump($user1, $user3);
+// Удаление пользователей по в соответствии с переданным массивом id
+// $arrayUsers->removeUsers();
 
-try {
-	$user100 = new User(100);
-	echo 'isExists() : ' . $user100->isExists($user100->id) . PHP_EOL;
-	var_dump($user100);
-} catch (Exception $e) {
-	// echo "Undefined user by id($user100->id)" . PHP_EOL;
-	var_dump($e);
-	echo $e->getMessage() . PHP_EOL;
-}
-
-echo 'FINISH.' . PHP_EOL;

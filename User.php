@@ -22,12 +22,12 @@ show() - получает строковое значение всех поле�
 format() - возвращает новый экземпляр stdClass с преобразованными полями возраста и пола.
 */
 class User {
-	private $id;
-	private $name;
-	private $surname;
-	private $birthdate;
-	private $sex;
-	private $nativeCity;
+	private int $id;
+	private string $name;
+	private string $surname;
+	private string $birthdate;
+	private bool $sex;
+	private string $nativeCity;
 
 	/*
 	Конструктор может принимать id или все поля (string name, string, surname, string birthdate, int sex, string nativeCity) кроме id, в этом случае создается новая запись в БД.
@@ -69,15 +69,25 @@ class User {
 			. "VALUES ('{$this->name}', '{$this->surname}', "
 			. "'{$this->birthdate}', {$this->sex}, '{$this->nativeCity}')";
 		Database::query($sql);
+
+		$sql = "select id from users order by id desc limit 1";
+		$set = Database::query($sql);
+		$row = $set->fetch_row();
+		$this->id = $row[0];
 	}
 
-	public function isExists(int $id)
+	private function isExists(int $id)
 	{
 		$sql = "SELECT id FROM users WHERE id=$id";
 		echo 'NUM_ROWS: ' . Database::query($sql)->num_rows . PHP_EOL;
 		return Database::query($sql)->num_rows > 0;
 	}
 
+	/* 
+	Метод статический потому чтобы не было необходимости
+	создавать новый объект для удаления. А также потому
+	что не было бы необходимости передавать id
+	*/
 	public static function remove(int $id) : void
 	{
 		$sql = "DELETE FROM users WHERE id={$id}";
