@@ -31,19 +31,27 @@ class UserArray
 		$this->users = $users;
 	}
 
-	public function getUsers()
+	public function getUsers() : array
 	{
 		$users = array();
 		foreach ($this->users as $id) {
-			array_push($users, new User($id));
+			try {
+				array_push($users, new User($id));
+			} catch (Exception $e) {
+				echo $e->getMessage();
+			}
 		}
 		return $users;
 	}
 
-	public function removeUsers()
+	public function removeUsers() : void
 	{
 		foreach ($this->users as $id) {
-			(new User($id))->remove();
+			try {
+				(new User($id))->remove();
+			} catch (Exception $e) {
+				echo $e->getMessage();
+			}
 		}
 	}
 }
