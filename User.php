@@ -18,11 +18,11 @@ include_once 'Database.php';
 Класс User создает сущность с полями: id, имя, фамилия, дата рождения, пол, город рождения.
 Принимает в конструкторе либо одно поле с id, либо с полями: имя, фамилия, дата рождения, пол, город рождения. В случае передачи id, читает запись из БД с указанным id. В случае передачи полей, создает новую запись в БД с указанными полями.
 Методы класса:
-- remove(int). Удаляет запись из БД по id
-- convertDateToAge(string). Получает возраст исходя из даты рождения
-- getSex(bool). Получает строковое значение пола исходя из булевского значения
-- show(). Получает строковое значение всех полей
-- format(). Возвращает новый экземпляр stdClass с преобразованными полями возраста и пола.
+remove(int) - удаляет запись из БД по id
+convertDateToAge(string). Получает возраст исходя из даты рождения
+getSex(bool) - получает строковое значение пола исходя из булевского значения
+show() - получает строковое значение всех полей
+format() - возвращает новый экземпляр stdClass с преобразованными полями возраста и пола.
 */
 class User {
 	private $id;
@@ -76,30 +76,6 @@ class User {
 		$sql = "SELECT id FROM users WHERE id=$id";
 		echo 'NUM_ROWS: ' . Database::query($sql)->num_rows . PHP_EOL;
 		return Database::query($sql)->num_rows > 0;
-	}
-
-	// Deprecated
-	private function edit()
-	{
-		$sql = "UPDATE users SET "
-			. "name='{$this->name}', "
-			. "surname='{$this->surname}', "
-			. "birthdate='{$this->birthdate}', "
-			. "sex='{$this->sex}', "
-			. "native_city='{$this->nativeCity}' "
-			. "WHERE id={$this->id}";
-
-		Database::query($sql);
-	}
-
-	// Deprecated
-	private function create()
-	{
-		$sql = "INSERT INTO users "
-			. "(name, surname, birthdate, sex, native_city) "
-			. "VALUES ('{$this->name}', '{$this->surname}', "
-			. "'{$this->birthdate}', {$this->sex}, '{$this->nativeCity}')";
-		Database::query($sql);
 	}
 
 	public static function remove(int $id) : void
