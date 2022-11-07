@@ -1,3 +1,8 @@
+DROP DATABASE IF EXISTS stlmax;
+
+CREATE DATABASE stlmax;
+USE stlmax;
+
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users(
