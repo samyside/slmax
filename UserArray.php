@@ -1,4 +1,20 @@
 <?php
+/**
+ * Автор: Влад Бабенко
+ * 
+ * Дата реализации: 06.11.2022 11:45
+ * 
+ * Дата изменения: 07.11.2022 14:17
+ * 
+ * Класс для работы со списками людей
+ */
+
+/*
+Класс работает при помощи класса User. Содержит массив id.
+Методы:
+getUsers() - возвращает массив объектов User, в соответствии с массивом, переданном в конструктор
+removeUsers() - удаляет записи User из базы данных
+*/
 include 'User.php';
 
 class UserArray
@@ -17,18 +33,6 @@ class UserArray
 			array_push($users, new User($id));
 		}
 		return $users;
-
-		/*$users_by_id = implode(',', $this->users);
-		$query = "SELECT id, name, surname, birthdate, sex, native_city FROM users WHERE id IN($users_by_id)";
-		$connection = new mysqli('localhost', 'root', 'asdfasdf', 'stlmax');
-		$result_set = $connection->query($query);
-		while ($row = $result_set->fetch_assoc()) {
-			array_push($users, new User($row['name']));
-		}
-
-		foreach ($this->users as $i) {
-			array_push($users, new User($this->users[$i]));
-		}*/
 	}
 
 	public function removeUsers()
