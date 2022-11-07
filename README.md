@@ -1,9 +1,9 @@
 # stlmax
 
 ## Окружение при разработке
-PHP version: PHP 8.1.12
-MySQL version: 8.0.31-0ubuntu0.22.04.1
-OS: GNU/Linux x86_64 5.15.0-52-generic
+- PHP version: PHP 8.1.12
+- MySQL version: 8.0.31-0ubuntu0.22.04.1
+- OS: GNU/Linux x86_64 5.15.0-52-generic
 
 ## Как запустить/тестировать
 Чтобы запустить необходимо:
