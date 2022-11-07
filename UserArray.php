@@ -43,7 +43,7 @@ class UserArray
 	public function removeUsers()
 	{
 		foreach ($this->users as $id) {
-			User::remove($id);
+			(new User($id))->remove();
 		}
 	}
 }

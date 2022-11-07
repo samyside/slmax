@@ -39,8 +39,7 @@ class User {
 		if ($args_count === 1) {
 			$this->id = $args[0];
 			if (!$this->isExists($this->id)) {
-				echo 'HERE IS Exception' . PHP_EOL;
-				throw new Exception("Error! User is undefined by id($this->id)");
+				throw new Exception("Error! User is undefined by id($this->id)\n");
 			}
 			$sql = "SELECT name, surname, birthdate, sex, native_city FROM users WHERE id={$this->id}";
 			$set = Database::query($sql);
@@ -79,34 +78,27 @@ class User {
 	private function isExists(int $id)
 	{
 		$sql = "SELECT id FROM users WHERE id=$id";
-		echo 'NUM_ROWS: ' . Database::query($sql)->num_rows . PHP_EOL;
 		return Database::query($sql)->num_rows > 0;
 	}
 
-	/* 
-	Метод статический потому чтобы не было необходимости
-	создавать новый объект для удаления. А также потому
-	что не было бы необходимости передавать id
-	*/
-	public static function remove(int $id) : void
+	public function remove() : void
 	{
-		$sql = "DELETE FROM users WHERE id={$id}";
+		$sql = "DELETE FROM users WHERE id=$this->id";
 		Database::query($sql);
 	}
 
-	public function getBirthdate()
+	private function getBirthdate()
 	{
 		return $this->birthdate;
 	}
 
-	public function getSex()
+	private function getSex()
 	{
 		return $this->sex;
 	}
 
 	public static function convertDateToAge($birthdate) : int
 	{
-		echo 'birthdate=' . $birthdate . PHP_EOL;
 		return date_diff(date_create($birthdate), date_create('now'))->y;
 	}
 

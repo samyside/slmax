@@ -28,7 +28,8 @@ try {
 }
 
 echo "\n---> Удаление пользователя по id\n";
-User::remove(4);
+// User::remove(4);
+$userByFields->remove();
 
 echo "\n---> Преобразование даты рождения в возраст\n";
 echo User::convertDateToAge('2000-01-02');
