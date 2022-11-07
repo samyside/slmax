@@ -1,8 +1,5 @@
 <?php
 /**
- * TODO:
- * [+] Проверять в конструкторе, доступен ли указанный id
- * 
  * Автор: Влад Бабенко
  * 
  * Дата реализации: 05.11.2022 11:00
@@ -32,6 +29,9 @@ class User {
 	private $sex;
 	private $nativeCity;
 
+	/*
+	Конструктор может принимать id или все поля (string name, string, surname, string birthdate, int sex, string nativeCity) кроме id, в этом случае создается новая запись в БД.
+	*/
 	public function __construct() {
 		$args_count = func_num_args();
 		$args = func_get_args();
