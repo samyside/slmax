@@ -90,16 +90,6 @@ class User {
 		Database::query($sql);
 	}
 
-	private function getBirthdate() : string
-	{
-		return $this->birthdate;
-	}
-
-	private function getSex() : bool
-	{
-		return $this->sex;
-	}
-
 	public static function convertDateToAge($birthdate) : int
 	{
 		return date_diff(date_create($birthdate), date_create('now'))->y;
@@ -128,8 +118,8 @@ class User {
 		$obj->birthdate = $this->birthdate;
 		$obj->sex = $this->sex;
 		$obj->nativeCity = $this->nativeCity;
-		$obj->age = self::convertDateToAge($this->getBirthdate());
-		$obj->sex = self::convertSex($this->getSex());
+		$obj->age = self::convertDateToAge($this->birthdate);
+		$obj->sex = self::convertSex($this->sex);
 		return $obj;
 	}
 }
